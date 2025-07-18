@@ -11,12 +11,15 @@ func main() {
 	greetMe("Sami Munir")
 	
 	var numerator int = 5
-	var denominator int = 0
+	var denominator int = 3
 	var result, remainder, err = intDivision(numerator, denominator)
 	if err != nil {
-		fmt.Printf("Error encountered: %v", err.Error())
+		fmt.Printf("\nError encountered: %v", err.Error())
+	} else if remainder == 0 {
+		fmt.Printf("\nintDivision(%v, %v): %v\n", numerator, denominator, result)
+	} else {
+		fmt.Printf("\nintDivision(%v, %v): %v, and the remainder is %v.\n", numerator, denominator, result, remainder)
 	}
-	fmt.Printf("\nintDivision(%v, %v): %v, and the remainder is %v.\n", numerator, denominator, result, remainder)
 }
 
 func printMe() {
@@ -30,10 +33,12 @@ func greetMe(name string) {
 func intDivision(numerator int, denominator int) (int, int, error) {
 	var err error
 	if denominator == 0 {
-		err = errors.New("Cannot divide by Zero.")
+		err = errors.New("cannot divide by Zero")
 		return 0, 0, err
+	
 	}
 	var result int = numerator / denominator
 	var remainder int = numerator % denominator
+	
 	return result, remainder, err
 }
