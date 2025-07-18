@@ -4,6 +4,12 @@ Sami Munir | Rutgers University | samidmunir@outlook.com
 
 ## Data Structures & Algorithms
 
+### Arrays
+
+- Static Array
+  - C
+- Dynamic Array
+
 ## Leetcode Mastery
 
 Leetcode #1 - Two Sum
