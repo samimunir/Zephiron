@@ -19,6 +19,10 @@ Leetcode #1 - Two Sum
 ### Golang
 
 - go_tutorial
+  - hello world
+  - vars, data types, consts, arithmetic
+  - fmt, functions, conditionals
+  * loops, arrays, slices, maps
 
 ## Projects
 
