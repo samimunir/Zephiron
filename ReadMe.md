@@ -23,6 +23,7 @@ Leetcode #1 - Two Sum
   - vars, data types, consts, arithmetic
   - fmt, functions, conditionals
   * loops, arrays, slices, maps
+  * strings, runes, bytes
 
 ## Projects
 
