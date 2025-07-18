@@ -14,6 +14,12 @@ Sami Munir | Rutgers University | samidmunir@outlook.com
 
 Leetcode #1 - Two Sum
 
+## Learning
+
+### Golang
+
+- go_tutorial
+
 ## Projects
 
 ## Client
