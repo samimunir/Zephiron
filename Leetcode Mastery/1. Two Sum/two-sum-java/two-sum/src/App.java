@@ -37,7 +37,7 @@ public class App {
         System.out.println("Test Case 1");
         System.out.println("---------------");
         System.out.println("Input: nums -> " + Arrays.toString(nums1) + "\n\ttarget -> " + target1);
-        System.out.println("Output: " + Arrays.toString(solution.solutionOne(nums1, target1)));
+        System.out.println("Output: " + Arrays.toString(solution.solutionTwo(nums1, target1)));
 
         // Test Case 2
         int[] nums2 = {3, 2, 4};
@@ -45,7 +45,7 @@ public class App {
         System.out.println("\nTest Case 2");
         System.out.println("---------------");
         System.out.println("Input: nums -> " + Arrays.toString(nums2) + "\n\ttarget -> " + target2);
-        System.out.println("Output: " + Arrays.toString(solution.solutionOne(nums2, target2)));
+        System.out.println("Output: " + Arrays.toString(solution.solutionTwo(nums2, target2)));
 
         // Test Case 3
         int[] nums3 = {3, 3};
@@ -53,6 +53,6 @@ public class App {
         System.out.println("\nTest Case 3");
         System.out.println("---------------");
         System.out.println("Input: nums -> " + Arrays.toString(nums3) + "\n\ttarget -> " + target3);
-        System.out.println("Output: " + Arrays.toString(solution.solutionOne(nums3, target3)));
+        System.out.println("Output: " + Arrays.toString(solution.solutionTwo(nums3, target3)));
     }
 }
