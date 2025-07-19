@@ -27,4 +27,9 @@ Leetcode #1 - Two Sum
 
 ## Projects
 
+### e-commerce-store
+
+- Node.js
+- Express.js
+
 ## Client
