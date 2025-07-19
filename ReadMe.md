@@ -31,5 +31,6 @@ Leetcode #1 - Two Sum
 
 - Node.js
 - Express.js
+- MongoDB
 
 ## Client
