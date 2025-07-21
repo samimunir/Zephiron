@@ -7,7 +7,7 @@ const generateTokens = (userId) => {
     expiresIn: "15m",
   });
 
-  const refreshToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
+  const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: "7d",
   });
 
@@ -58,21 +58,42 @@ export const signup = async (req, res) => {
     setCookies(res, accessToken, refreshToken);
 
     return res.status(201).json({
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-      message: "User created successfully.",
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
     });
   } catch (error) {
+    console.log("Error in signup controller:", error.message);
     return res.status(500).json({ message: error.message });
   }
 };
 
 export const login = async (req, res) => {
-  res.send("Login up route called");
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (user && (await user.comparePassword(password))) {
+      const { accessToken, refreshToken } = generateTokens(user._id);
+
+      await storeRefreshToken(user._id, refreshToken);
+
+      setCookies(res, accessToken, refreshToken);
+
+      return res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      });
+    } else {
+      return res.status(400).json({ message: "Invalid email or password." });
+    }
+  } catch (error) {
+    console.log("Error in login controller:", error.message);
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 export const logout = async (req, res) => {
@@ -91,6 +112,7 @@ export const logout = async (req, res) => {
 
     return res.json({ message: "Logged out successfully." });
   } catch (error) {
+    console.log("Error in logout controller:", error.message);
     return res
       .status(500)
       .json({ message: "Server error", error: error.message });
