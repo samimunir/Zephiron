@@ -14,6 +14,8 @@ Sami Munir | Rutgers University | samidmunir@outlook.com
 
 Leetcode #1 - Two Sum
 
+Leetcode #14 - Longest Common Prefix
+
 ## Learning
 
 ### Golang
