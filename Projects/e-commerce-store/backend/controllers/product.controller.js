@@ -121,3 +121,17 @@ export const getRecommendedProducts = async (req, res) => {
       .json({ message: "Server error.", error: error.message });
   }
 };
+
+export const getProductsByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+
+    const products = await Product.find({ category });
+    return res.json(products);
+  } catch (error) {
+    console.log("Error in getProductsByCategory() controller:", error.message);
+    return res
+      .status(500)
+      .json({ message: "Server error.", error: error.message });
+  }
+};
