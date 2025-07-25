@@ -16,6 +16,8 @@ Leetcode #1 - Two Sum
 
 Leetcode #14 - Longest Common Prefix
 
+Leetcode #26 - Remove Duplicates from Sorted Array
+
 ## Learning
 
 ### Golang
