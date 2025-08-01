@@ -36,5 +36,8 @@ Leetcode #26 - Remove Duplicates from Sorted Array
 - Node.js
 - Express.js
 - MongoDB
+- Upstash
+- Redis
+- Stripe
 
 ## Client
