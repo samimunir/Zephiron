@@ -1,5 +1,13 @@
+import { Routes } from "react-router-dom";
+
 function App() {
-  return <div className="text-red-500">Hello world</div>;
+  return (
+    <div>
+      <Routes>
+        <Route path="/" element={} />
+      </Routes>
+    </div>
+  )
 }
 
 export default App;
