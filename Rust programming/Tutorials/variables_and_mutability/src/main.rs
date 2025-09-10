@@ -1,3 +1,9 @@
+// CONSTANTS
+const TAX_RATE: f64 = 7.257;
+
+// TYPE ALIASES
+type Meters = i32;
+
 fn main() {
     println!("Variables & Mutability with Rust!");
     println!("---------------------------------\n");
@@ -60,4 +66,45 @@ fn main() {
     println!("\nnum = {}", num);
     let num = 3.14;
     println!("num = {}", num);
+
+    /*
+        Scope (independent area/region of execution).
+    */
+    let mut x = 7;
+    println!("\nx (before block code) = {}", x);
+    {
+        let step = 2;
+        x += step;
+    }
+    println!("x (after block code) = {}", x);
+
+    /*
+        Constants vs. Immutable vars
+
+        - A constant is a name assigned to a value. A constant's value cannot change.
+        - Cannot use "mut" keyword with constants.
+        - A constant has GLOBAL scope; variables are limited to function scope.
+        - A constant's value must be known at compile time.
+    */
+    print_tax_rate();
+
+    /*
+        Type Aliases
+        - An alternate name that we can assign to an existing type.
+        - Provide additional context regarding what that type represents.
+    */
+    let mile_race_length: Meters = 1600;
+    println!("\nmile_race_length = {}", mile_race_length);
+
+    /*
+        A compiler directive is an annotation that tells the compiler how to parse the source code.
+        - an instruction to the compiler
+        - E.g.: allow(__type__)
+    */
+    #[allow(unused_variables)]
+    let temp: i8 = 24;
+}
+
+fn print_tax_rate() {
+    println!("\nThe tax rate is {TAX_RATE}.");
 }
