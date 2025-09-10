@@ -1,0 +1,1 @@
+C:\Users\samid\OneDrive\Desktop\samimunir\Zephiron\Rust\ programming\Tutorials\hello_world\target\release\hello_world.exe: C:\Users\samid\OneDrive\Desktop\samimunir\Zephiron\Rust\ programming\Tutorials\hello_world\src\main.rs
