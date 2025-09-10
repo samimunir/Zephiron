@@ -3,3 +3,4 @@ Sami Munir | Rutgers University | samidmunir@outlook.com
 ## Rust programming
 ### Tutorials
 - hello_world
+- variables_and_mutability
