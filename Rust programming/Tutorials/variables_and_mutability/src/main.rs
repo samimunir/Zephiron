@@ -1,33 +1,46 @@
 fn main() {
     println!("Variables & Mutability with Rust!");
+    println!("---------------------------------\n");
 
     let my_name = "Sami";
-    println!("my_name: {}", my_name);
+    println!("my_name = {}", my_name);
 
     let my_num = 7;
-    println!("my_num: {}", my_num);
+    println!("my_num = {}", my_num);
     
     let addition = 11 + 12;
-    println!("addition: {}", addition);
+    println!("addition of 11 + 12 = {}", addition);
 
     let a = 9;
-    println!("a: {}", a);
+    println!("a = {}", a);
 
     let b = 3;
-    println!("b: {}", b);
+    println!("b = {}", b);
 
     let sum = a + b;
-    println!("sum: {}", sum);
+    println!("sum of {} + {} = {}", a, b, sum);
 
     let difference = a - b;
-    println!("difference: {}", difference);
+    println!("difference of {} - {} = {}", a, b, difference);
 
     let product = a * b;
-    println!("product: {}", product);
+    println!("product of {} * {} = {}", a, b, product);
 
     let quotient = a / b;
-    println!("quotient: {}", quotient);
+    println!("quotient of {} / {} = {}", a, b, quotient);
 
     let modulus = a % b;
-    println!("modolus: {}", modulus);
+    println!("modolus of {} % {} = {}", a, b, modulus);
+
+    /*
+        - Place an underscore (_) before a variable name to explicitly define it as unused.
+
+        - Variables are immutable by default (cannot be changed/altered).
+            > use the "mut" keyword to make a variable mutable.
+    */
+
+    let mut fav_num = 10;
+    println!("\nfav_num (before) = {}", fav_num);
+    fav_num = 7;
+    println!("fav_num (after) = {}", fav_num);
 }
