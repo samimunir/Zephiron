@@ -1,0 +1,1 @@
+C:\Users\samid\OneDrive\Desktop\samimunir\Zephiron\Rust\ programming\Projects\job_tracker_cli\target\debug\job_tracker_cli.exe: C:\Users\samid\OneDrive\Desktop\samimunir\Zephiron\Rust\ programming\Projects\job_tracker_cli\src\main.rs

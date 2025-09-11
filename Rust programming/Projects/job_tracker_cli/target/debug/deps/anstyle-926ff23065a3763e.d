@@ -1,0 +1,10 @@
+C:\Users\samid\OneDrive\Desktop\samimunir\Zephiron\Rust programming\Projects\job_tracker_cli\target\debug\deps\anstyle-926ff23065a3763e.d: C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\lib.rs C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\macros.rs C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\color.rs C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\effect.rs C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\reset.rs C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\style.rs
+
+C:\Users\samid\OneDrive\Desktop\samimunir\Zephiron\Rust programming\Projects\job_tracker_cli\target\debug\deps\libanstyle-926ff23065a3763e.rmeta: C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\lib.rs C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\macros.rs C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\color.rs C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\effect.rs C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\reset.rs C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\style.rs
+
+C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\lib.rs:
+C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\macros.rs:
+C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\color.rs:
+C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\effect.rs:
+C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\reset.rs:
+C:\Users\samid\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\anstyle-1.0.11\src\style.rs:
