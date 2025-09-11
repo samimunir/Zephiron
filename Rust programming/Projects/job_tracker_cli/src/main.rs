@@ -113,7 +113,23 @@ fn main() -> Result<()> {
             }
         }
         Command::Done {id, status} => {
-            println!("(placeholder) Would mark #{id} as {status}");
+            let new_status: Status = status.into();
+            let mut updated = false;
+
+            // Limit the lifetime of the &mut borrow to this block.
+            {
+                if let Some(r) = items.iter_mut().find(|r| r.id == id) {
+                    r.status = new_status.clone();
+                    updated = true;
+                }
+            } // mutable borrow of "items" ends here.
+
+            if updated {
+                save_db(&cli.db, &items)?;
+                println!("Updated #{id} -> {}", pretty(&new_status));
+            } else {
+                println!("No record with ID {id}");
+            }
         }
         Command::Remove {id} => {
             println!("(placeholder) Would remove #{id}");
