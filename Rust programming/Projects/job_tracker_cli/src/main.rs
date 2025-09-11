@@ -77,6 +77,8 @@ impl From<String> for Status {
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
+    let mut items = load_db(&cli.db)?;
+
     match cli.cmd {
         Command::Add {title, company} => {
             println!("(placeholder) Would add '{title}' @ {company} into {:?}", cli.db);
@@ -93,4 +95,16 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+// Read JSON database
+fn load_db(path: &Path) -> Result<Vec<Record>> {
+    if !path.exists() {
+        return Ok(vec![]);
+    }
+
+    let data = fs::read_to_string(path)?;
+    let items: Vec<Record> = serde_json::from_str(&data)?;
+
+    ok(items)
 }
