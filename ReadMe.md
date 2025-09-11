@@ -4,3 +4,5 @@ Sami Munir | Rutgers University | samidmunir@outlook.com
 ### Tutorials
 - hello_world
 - variables_and_mutability
+### Projects
+- job_tracker_cli
