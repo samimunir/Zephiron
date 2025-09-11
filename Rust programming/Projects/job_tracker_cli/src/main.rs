@@ -1,6 +1,10 @@
 use anyhow::Result;
 use clap::{Parser, Subcommand};
-use std::path::PathBuf;
+use serde::{Deserialize, Serialize};
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
 // job_tracker_cli: track your job applications locally.
 #[derive(Parser, Debug)]
@@ -42,6 +46,21 @@ enum Command {
         // Record ID
         id: usize,
     },
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct Record {
+    id: usize,
+    title: String,
+    company: String,
+    status: Status,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+enum Status {
+    Open,
+    Interview,
+    Closed,
 }
 
 fn main() -> Result<()> {
