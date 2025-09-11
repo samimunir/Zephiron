@@ -63,6 +63,17 @@ enum Status {
     Closed,
 }
 
+// Simple String -> Status mapper
+impl From<String> for Status {
+    fn from(s: String) -> Self {
+        match s.to_lowercase().as_str() {
+            "interview" => Status::Interview,
+            "closed" => Status::Closed,
+            _ => Status::Open,
+        }
+    }
+}
+
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
