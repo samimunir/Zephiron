@@ -106,5 +106,12 @@ fn load_db(path: &Path) -> Result<Vec<Record>> {
     let data = fs::read_to_string(path)?;
     let items: Vec<Record> = serde_json::from_str(&data)?;
 
-    ok(items)
+    Ok(items)
+}
+
+// Write whole DB back to disk
+fn save_db(path: &Path, items: &Vec<Record>) -> Result<()> {
+    let data = serde_json::to_string_pretty(items)?;
+    fs::write(path, data)?;
+    Ok(())
 }
