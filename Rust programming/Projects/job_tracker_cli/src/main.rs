@@ -132,7 +132,12 @@ fn main() -> Result<()> {
             }
         }
         Command::Remove {id} => {
-            println!("(placeholder) Would remove #{id}");
+            let before = items.len();
+            
+            items.retain(|r| r.id != id);
+            
+            save_db(&cli.db, &items)?;
+            println!("Removed {} items(s).", before.saturating_sub(items.len()));
         }
     }
 
