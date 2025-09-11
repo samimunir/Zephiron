@@ -34,4 +34,30 @@ fn main() {
 
     let sixteen_bit_unsigned: u8 = 7;
     println!("sixteen_bit_unsigned = {}", sixteen_bit_unsigned);
+
+    let another_way = 0u8;
+    println!("another_way = {}", another_way);
+
+    /*
+        We can place underscores to separate groups of 3 digits to improve number
+            readability in Rust.
+    */
+    #[allow(unused_variables)]
+    let num_a: i32 = 32_500;
+
+    /*
+        usize vs. isize
+        - 64-bit machine vs. 32-bit machine
+        - on a 64-bit machine, a signed-32-bit integer will actually be stored in 
+            a signed-64-bit integer type.
+    */
+
+    /*
+        Strings & Raw strings
+        - a sequence of characters.
+        - alternate syntax with backslash-double-quote to embed quotation marks within.
+        - a RAW string will ignore all special/escape characters.
+    */
+    let file_path = r"C:\samimunir\Desktop\Zephiron\Rust programming\";
+    println!("\nfile_path > {}", file_path);
 }
