@@ -95,7 +95,22 @@ fn main() -> Result<()> {
             println!("Added application #{next_id}");
         }
         Command::List => {
-            println!("(placeholder) Would list items from {:?}", cli.db);
+            if items.is_empty() {
+                println!("No applications yet. Use `job_tracker_cli add` to create one.");
+            } else {
+                println!("{:<4} {:<10} | {:<24} @ {}", "ID", "Status", "Title", "Company");
+                println!("{}", "-".repeat(64));
+
+                for r in &items {
+                    println!(
+                        "#{:<3} {:<10} | {:<24} @ {}",
+                        r.id,
+                        pretty(&r.status),
+                        r.title,
+                        r.company,
+                    );
+                }
+            }
         }
         Command::Done {id, status} => {
             println!("(placeholder) Would mark #{id} as {status}");
