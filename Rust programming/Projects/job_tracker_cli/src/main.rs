@@ -43,3 +43,24 @@ enum Command {
         id: usize,
     },
 }
+
+fn main() -> Result<()> {
+    let cli = Cli::parse();
+
+    match cli.cmd {
+        Command::Add {title, company} => {
+            println!("(placeholder) Would add '{title}' @ {company} into {:?}", cli.db);
+        }
+        Command::List => {
+            println!("(placeholder) Would list items from {:?}", cli.db);
+        }
+        Command::Done {id, status} => {
+            println!("(placeholder) Would mark #{id} as {status}");
+        }
+        Command::Remove {id} => {
+            println!("(placeholder) Would remove #{id}");
+        }
+    }
+
+    Ok(())
+}
