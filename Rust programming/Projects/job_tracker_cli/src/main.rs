@@ -81,7 +81,18 @@ fn main() -> Result<()> {
 
     match cli.cmd {
         Command::Add {title, company} => {
-            println!("(placeholder) Would add '{title}' @ {company} into {:?}", cli.db);
+            let next_id = items.iter().map(|r| r.id).max().unwrap_or(0) + 1;
+            
+            items.push(Record {
+                id: next_id,
+                title,
+                company,
+                status: Status::Open,
+            });
+
+            save_db(&cli.db, &items)?;
+
+            println!("Added application #{next_id}");
         }
         Command::List => {
             println!("(placeholder) Would list items from {:?}", cli.db);
@@ -114,4 +125,12 @@ fn save_db(path: &Path, items: &Vec<Record>) -> Result<()> {
     let data = serde_json::to_string_pretty(items)?;
     fs::write(path, data)?;
     Ok(())
+}
+
+fn pretty(s: &Status) -> &'static str {
+    match s {
+        Status::Open => "Open",
+        Status::Interview => "Interview",
+        Status::Closed => "Closed",
+    }
 }
