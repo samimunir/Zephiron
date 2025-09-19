@@ -79,6 +79,15 @@ export const logout = async (req, res) => {
   return noContent(res);
 };
 
+export const logoutAll = async (req, res) => {
+  await Session.updateMany(
+    { user: req.user._id, revokedAt: { $exists: false } },
+    { $set: { revokedAt: new Date() } }
+  );
+  return noContent(res);
+};
+
+
 export const me = async (req, res) => {
   return ok(res, { user: req.user });
 };
