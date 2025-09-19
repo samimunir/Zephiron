@@ -6,7 +6,6 @@ import { connectDB, disconnectDB } from "./config/db.js";
 
 const server = http.createServer(app);
 
-// Start sequence
 (async () => {
   try {
     await connectDB();
@@ -19,8 +18,7 @@ const server = http.createServer(app);
   }
 })();
 
-// Graceful shutdown
-const shutdown = async (signal) => {
+const shutdown = (signal) => {
   logger.info(`${signal} received, shutting down…`);
   server.close(async () => {
     await disconnectDB();
