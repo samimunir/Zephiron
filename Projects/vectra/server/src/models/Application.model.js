@@ -8,9 +8,8 @@ const ApplicationSchema = new mongoose.Schema({
   workType: { type: String, enum: ["remote", "in-person", "hybrid"], index: true },
   location: { type: String, trim: true },
   careerCategory: { type: String, trim: true },
-  positionType: { type: String, trim: true }, // e.g., full-time, contract
+  positionType: { type: String, trim: true },
 
-  // salary: flexible
   salary: {
     amount: Number,
     currency: { type: String, default: "USD" },
@@ -30,13 +29,11 @@ const ApplicationSchema = new mongoose.Schema({
     index: true
   },
 
-  // Timeline of key events for analytics
   history: [{
     at: { type: Date, default: Date.now },
     type: { type: String, enum: ["created", "status_changed", "note_added"] },
     payload: mongoose.Schema.Types.Mixed
-  }],
-
+  }]
 }, { timestamps: true });
 
 ApplicationSchema.index({ user: 1, createdAt: -1 });

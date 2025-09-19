@@ -6,9 +6,10 @@ const SessionSchema = new mongoose.Schema({
   userAgent: String,
   ip: String,
   revokedAt: Date,
-  expiresAt: { type: Date, required: true },
+  expiresAt: { type: Date, required: true }
 }, { timestamps: true });
 
 SessionSchema.index({ user: 1, refreshToken: 1 }, { unique: true });
+SessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export default mongoose.model("Session", SessionSchema);
