@@ -118,3 +118,36 @@ export async function createApplication(payload: {
   const { data } = await api.post("/applications", payload);
   return data as AppItem;
 }
+
+// ----- Applications: update + delete -----
+export async function updateApplication(
+  id: string,
+  payload: Partial<{
+    jobTitle: string;
+    company: string;
+    status: "applied" | "interview" | "offer" | "rejected" | "closed";
+    workType: "remote" | "in-person" | "hybrid";
+    location: string;
+    notes: string;
+  }>
+) {
+  const { data } = await api.patch(`/applications/${id}`, payload);
+  return data as AppItem;
+}
+
+export async function deleteApplication(id: string) {
+  await api.delete(`/applications/${id}`);
+}
+
+// ----- Users: profile get + update -----
+export async function getMyProfile() {
+  const { data } = await api.get("/users/me");
+  return data.user as import("../types/api").User;
+}
+export async function updateMyProfile(payload: {
+  name?: string;
+  avatarUrl?: string | null;
+}) {
+  const { data } = await api.patch("/users/me", payload);
+  return data.user as import("../types/api").User;
+}
