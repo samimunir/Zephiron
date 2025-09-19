@@ -1,5 +1,4 @@
-import jwt from "jsonwebtoken";
-import env from "../config/env.js";
+import { verifyAccess } from "../utils/jwt.js";
 import User from "../models/User.model.js";
 
 export async function requireAuth(req, res, next) {
@@ -8,7 +7,7 @@ export async function requireAuth(req, res, next) {
   if (!token) return res.status(401).json({ message: "Unauthorized" });
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    const payload = verifyAccess(token);
     const user = await User.findById(payload.sub).lean();
     if (!user) return res.status(401).json({ message: "Unauthorized" });
     req.user = user;
