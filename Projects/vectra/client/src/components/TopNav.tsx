@@ -14,13 +14,24 @@ export default function TopNav() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           {user && (
-            <button
-              onClick={logout}
-              className="inline-flex items-center gap-2 rounded-full bg-neutral-900 text-white px-3 py-2 text-sm hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"
-            >
-              <LogOut className="h-4 w-4" />
-              Logout
-            </button>
+            <div className="hidden sm:flex items-center gap-3">
+              <div className="rounded-full bg-neutral-100 px-3 py-1 text-sm text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
+                {user.name || user.email}
+              </div>
+              <button
+                onClick={logout}
+                className="inline-flex items-center gap-2 rounded-full bg-neutral-900 text-white px-3 py-2 text-sm hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"
+              >
+                Logout
+              </button>
+            </div>
+            // <button
+            //   onClick={logout}
+            //   className="inline-flex items-center gap-2 rounded-full bg-neutral-900 text-white px-3 py-2 text-sm hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white"
+            // >
+            //   <LogOut className="h-4 w-4" />
+            //   Logout
+            // </button>
           )}
         </div>
       </div>

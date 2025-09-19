@@ -4,7 +4,7 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
 
 export const api = axios.create({
   baseURL: API_BASE,
-  headers: { "Content-Type": "application/json" }
+  headers: { "Content-Type": "application/json" },
 });
 
 let accessToken: string | null = null;
@@ -25,7 +25,9 @@ let pending: Array<() => void> = [];
 
 async function refreshTokens() {
   if (!refreshToken) throw new Error("No refresh token");
-  const { data } = await axios.post(`${API_BASE}/auth/refresh`, { token: refreshToken });
+  const { data } = await axios.post(`${API_BASE}/auth/refresh`, {
+    token: refreshToken,
+  });
   accessToken = data.accessToken;
   refreshToken = data.refreshToken;
   return data;
@@ -57,3 +59,62 @@ api.interceptors.response.use(
     throw err;
   }
 );
+
+export async function fetchStatusCounts() {
+  const { data } = await api.get("/applications/stats/status-counts");
+  return data as {
+    applied: number;
+    interview: number;
+    offer: number;
+    rejected: number;
+    closed: number;
+  };
+}
+
+export async function fetchCreatedPerDay(days = 30) {
+  const { data } = await api.get("/applications/stats/created-per-day", {
+    params: { days },
+  });
+  return data as Array<{ date: string; count: number }>;
+}
+
+export type AppItem = {
+  _id: string;
+  jobTitle: string;
+  company: string;
+  status: "applied" | "interview" | "offer" | "rejected" | "closed";
+  createdAt: string;
+};
+
+export type AppList = {
+  items: AppItem[];
+  page: number;
+  pageSize: number;
+  total: number;
+  pages: number;
+};
+
+export async function listApplications(params: {
+  status?: string;
+  q?: string;
+  company?: string;
+  page?: number;
+  pageSize?: number;
+  sort?: string;
+}) {
+  const { data } = await api.get("/applications", { params });
+  return data as AppList;
+}
+
+export async function createApplication(payload: {
+  jobTitle: string;
+  company: string;
+  workType?: "remote" | "in-person" | "hybrid";
+  status?: "applied" | "interview" | "offer" | "rejected" | "closed";
+  location?: string;
+  notes?: string;
+  tags?: string[];
+}) {
+  const { data } = await api.post("/applications", payload);
+  return data as AppItem;
+}

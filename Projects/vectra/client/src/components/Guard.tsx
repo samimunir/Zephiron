@@ -13,7 +13,11 @@ export function ProOnly({ children }: { children: JSX.Element }) {
   const { user } = useAuth();
   if (!user) return <Navigate to="/landing" replace />;
   if (user.plan !== "pro") {
-    return <div className="p-6">This feature requires <span className="font-semibold">Pro</span>.</div>;
+    return (
+      <div className="p-6">
+        This feature requires <span className="font-semibold">Pro</span>.
+      </div>
+    );
   }
   return children;
 }

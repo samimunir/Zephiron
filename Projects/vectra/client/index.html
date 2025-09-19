@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
@@ -13,46 +13,61 @@
     <script>
       // Inline Tailwind config for CDN only
       tailwind.config = {
-        darkMode: 'class',
+        darkMode: "class",
         theme: {
           extend: {
             colors: {
               brand: {
-                50:  '#eff8ff',
-                100: '#dbeefe',
-                200: '#bfdfff',
-                300: '#93caff',
-                400: '#5ea8ff',
-                500: '#2f86ff',  // primary
-                600: '#1f6be6',
-                700: '#1a57bf',
-                800: '#184a9c',
-                900: '#163f82',
+                50: "#eff8ff",
+                100: "#dbeefe",
+                200: "#bfdfff",
+                300: "#93caff",
+                400: "#5ea8ff",
+                500: "#2f86ff", // primary
+                600: "#1f6be6",
+                700: "#1a57bf",
+                800: "#184a9c",
+                900: "#163f82",
               },
-              accent: { 500: '#15d39a' }
+              accent: { 500: "#15d39a" },
             },
-            borderRadius: { xl: '1rem', '2xl': '1.25rem' },
-            boxShadow: { soft: '0 10px 30px rgba(0,0,0,0.08)' },
+            borderRadius: { xl: "1rem", "2xl": "1.25rem" },
+            boxShadow: { soft: "0 10px 30px rgba(0,0,0,0.08)" },
             keyframes: {
-              'fade-in': { '0%': { opacity: '0', transform: 'translateY(8px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-              'scale-in': { '0%': { opacity: '0', transform: 'scale(0.98)' }, '100%': { opacity: '1', transform: 'scale(1)' } }
+              "fade-in": {
+                "0%": { opacity: "0", transform: "translateY(8px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+              "scale-in": {
+                "0%": { opacity: "0", transform: "scale(0.98)" },
+                "100%": { opacity: "1", transform: "scale(1)" },
+              },
             },
             animation: {
-              'fade-in': 'fade-in 300ms ease-out',
-              'scale-in': 'scale-in 200ms ease-out'
-            }
-          }
-        }
+              "fade-in": "fade-in 300ms ease-out",
+              "scale-in": "scale-in 200ms ease-out",
+            },
+          },
+        },
       };
     </script>
 
     <!-- Optional: system font stack for a clean default -->
     <style>
-      html, body, #root { height: 100%; }
-      body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji"; }
+      html,
+      body,
+      #root {
+        height: 100%;
+      }
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          Inter, Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji";
+      }
     </style>
   </head>
-  <body class="bg-white text-neutral-900 dark:bg-[#0b1020] dark:text-neutral-100 antialiased">
+  <body
+    class="bg-white text-neutral-900 dark:bg-[#0b1020] dark:text-neutral-100 antialiased"
+  >
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

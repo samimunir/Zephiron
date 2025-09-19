@@ -11,7 +11,9 @@ import {
   createApplication,
   listApplications,
   updateApplication,
-  removeApplication
+  removeApplication,
+  statusCounts,
+  createdPerDay
 } from "../controllers/applications.controller.js";
 
 const r = Router();
@@ -20,4 +22,6 @@ r.post("/", validate(createApplicationSchema), createApplication);
 r.get("/", validate(listApplicationsSchema), listApplications);
 r.patch("/:id", validate(updateApplicationSchema), updateApplication);
 r.delete("/:id", validate(removeApplicationSchema), removeApplication);
+r.get("/stats/status-counts", statusCounts);
+r.get("/stats/created-per-day", createdPerDay);
 export default r;

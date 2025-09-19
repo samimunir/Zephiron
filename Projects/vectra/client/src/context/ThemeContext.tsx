@@ -1,12 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Ctx = { isDark: boolean; toggle: () => void; };
+type Ctx = { isDark: boolean; toggle: () => void };
 const ThemeCtx = createContext<Ctx>({ isDark: false, toggle: () => {} });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState(() => {
-    return localStorage.getItem("vectra_theme") === "dark" ||
-      (matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+    return (
+      localStorage.getItem("vectra_theme") === "dark" ||
+      (matchMedia && matchMedia("(prefers-color-scheme: dark)").matches)
+    );
   });
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [isDark]);
 
   return (
-    <ThemeCtx.Provider value={{ isDark, toggle: () => setIsDark(v => !v) }}>
+    <ThemeCtx.Provider value={{ isDark, toggle: () => setIsDark((v) => !v) }}>
       {children}
     </ThemeCtx.Provider>
   );
