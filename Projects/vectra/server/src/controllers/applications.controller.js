@@ -1,5 +1,5 @@
-// controllers/applications.controller.js
 import Application from "../models/Application.model.js";
+import { ok, created, noContent } from "../utils/apiResponse.js";
 
 export const createApplication = async (req, res) => {
   const doc = await Application.create({
@@ -7,7 +7,7 @@ export const createApplication = async (req, res) => {
     user: req.user._id,
     history: [{ type: "created", payload: {} }]
   });
-  res.status(201).json(doc);
+  return created(res, doc);
 };
 
 export const listApplications = async (req, res) => {
@@ -25,8 +25,7 @@ export const listApplications = async (req, res) => {
     Application.find(filter).sort(sort).skip((page - 1) * pageSize).limit(pageSize).lean(),
     Application.countDocuments(filter)
   ]);
-
-  res.json({ items, page, pageSize, total, pages: Math.ceil(total / pageSize) });
+  return ok(res, { items, page, pageSize, total, pages: Math.ceil(total / pageSize) });
 };
 
 export const updateApplication = async (req, res) => {
@@ -39,11 +38,11 @@ export const updateApplication = async (req, res) => {
     before.history.push({ type: "status_changed", payload: { from: before.status, to: req.body.status } });
   }
   await before.save();
-  res.json(before);
+  return ok(res, before);
 };
 
 export const removeApplication = async (req, res) => {
   const deleted = await Application.findOneAndDelete({ _id: req.params.id, user: req.user._id });
   if (!deleted) return res.status(404).json({ message: "Not found" });
-  res.status(204).end();
+  return noContent(res);
 };
