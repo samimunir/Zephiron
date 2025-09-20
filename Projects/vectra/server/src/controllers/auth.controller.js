@@ -18,14 +18,14 @@ export const register = async (req, res) => {
   await Session.create({
     user: user._id,
     refreshToken,
-    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
+    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
   });
   const accessToken = signAccess(user._id.toString());
 
   return created(res, {
     user: { id: user._id, email: user.email, name: user.name, plan: user.plan },
     accessToken,
-    refreshToken
+    refreshToken,
   });
 };
 
@@ -40,14 +40,14 @@ export const login = async (req, res) => {
   await Session.create({
     user: user._id,
     refreshToken,
-    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
+    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
   });
   const accessToken = signAccess(user._id.toString());
 
   return ok(res, {
     user: { id: user._id, email: user.email, name: user.name, plan: user.plan },
     accessToken,
-    refreshToken
+    refreshToken,
   });
 };
 
@@ -55,7 +55,11 @@ export const refresh = async (req, res) => {
   const { token } = req.body;
   try {
     const payload = verifyRefresh(token);
-    const session = await Session.findOne({ refreshToken: token, user: payload.sub, revokedAt: { $exists: false } });
+    const session = await Session.findOne({
+      refreshToken: token,
+      user: payload.sub,
+      revokedAt: { $exists: false },
+    });
     if (!session) return res.status(401).json({ message: "Invalid session" });
 
     await Session.deleteOne({ _id: session._id }); // rotate
@@ -65,7 +69,7 @@ export const refresh = async (req, res) => {
     await Session.create({
       user: payload.sub,
       refreshToken: newRefresh,
-      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
     });
     return ok(res, { accessToken, refreshToken: newRefresh });
   } catch {
@@ -75,7 +79,10 @@ export const refresh = async (req, res) => {
 
 export const logout = async (req, res) => {
   const { token } = req.body;
-  await Session.updateOne({ refreshToken: token }, { $set: { revokedAt: new Date() } });
+  await Session.updateOne(
+    { refreshToken: token },
+    { $set: { revokedAt: new Date() } }
+  );
   return noContent(res);
 };
 
@@ -86,7 +93,6 @@ export const logoutAll = async (req, res) => {
   );
   return noContent(res);
 };
-
 
 export const me = async (req, res) => {
   return ok(res, { user: req.user });

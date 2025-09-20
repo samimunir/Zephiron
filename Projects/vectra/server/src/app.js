@@ -13,13 +13,20 @@ const app = express();
 // Security & basics
 app.set("trust proxy", 1);
 app.use(helmet());
-app.use(cors({
-  origin: [env.ALLOWED_ORIGIN],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [env.ALLOWED_ORIGIN],
+    credentials: true,
+  })
+);
 
 // Webhook raw body (Stripe) BEFORE json parsing
-app.post("/webhooks/stripe", express.raw({ type: "application/json" }), webhookRoutes);
+// app.post("/webhooks/stripe", express.raw({ type: "application/json" }), webhookRoutes);
+app.use(
+  "/webhooks/stripe",
+  express.raw({ type: "application/json" }),
+  webhookRoutes
+);
 
 // JSON parser for all other routes
 app.use(express.json({ limit: "100kb" }));
@@ -29,7 +36,9 @@ app.use(apiLimiter);
 
 // Health endpoints
 app.get("/health", (_req, res) => res.json({ ok: true }));
-app.get("/readiness", (_req, res) => res.status(isDBReady() ? 200 : 503).json({ db: isDBReady() }));
+app.get("/readiness", (_req, res) =>
+  res.status(isDBReady() ? 200 : 503).json({ db: isDBReady() })
+);
 
 // API routes
 app.use("/api/v1", routes);

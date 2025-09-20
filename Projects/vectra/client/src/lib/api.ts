@@ -139,15 +139,31 @@ export async function deleteApplication(id: string) {
   await api.delete(`/applications/${id}`);
 }
 
-// ----- Users: profile get + update -----
 export async function getMyProfile() {
   const { data } = await api.get("/users/me");
   return data.user as import("../types/api").User;
 }
+
 export async function updateMyProfile(payload: {
   name?: string;
   avatarUrl?: string | null;
 }) {
   const { data } = await api.patch("/users/me", payload);
   return data.user as import("../types/api").User;
+}
+
+// export async function createCheckout(priceId: string) {
+//   const { data } = await api.post("/billing/checkout-session", { priceId });
+//   return data as { url: string };
+// }
+
+export async function createCheckout(priceId?: string) {
+  const payload = priceId ? { priceId } : {}; // server will fall back to STRIPE_PRICE_PRO
+  const { data } = await api.post("/billing/checkout-session", payload);
+  return data as { url: string };
+}
+
+export async function createPortal() {
+  const { data } = await api.post("/billing/portal");
+  return data as { url: string };
 }
