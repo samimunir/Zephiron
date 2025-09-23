@@ -175,7 +175,7 @@ export async function stripeWebhook(req, res) {
     ) {
       const sub = event.data.object;
       const customerId = sub?.customer;
-      const status = sub?.status; // active | trialing | past_due | canceled | incomplete | ...
+      const status = sub?.status;
       const currentPeriodEnd = sub?.current_period_end
         ? new Date(sub.current_period_end * 1000)
         : null;
@@ -189,7 +189,6 @@ export async function stripeWebhook(req, res) {
           stripeCustomerId: customerId,
         }).select("_id");
         if (!user) {
-          // Can happen if subscription.* arrives before checkout.session.completed
           console.log(
             "[stripeWebhook] no user for customer yet; will be handled on next retry",
             { customerId }
@@ -203,12 +202,14 @@ export async function stripeWebhook(req, res) {
                   status === "active" || status === "trialing" ? "pro" : "free",
                 subscriptionStatus: status || "unknown",
                 currentPeriodEnd,
+                stripeSubscriptionId: sub.id, // <-- store it!
               },
             }
           );
           console.log("[stripeWebhook] user subscription updated", {
             userId: user._id,
             status,
+            subId: sub.id,
           });
         }
       }

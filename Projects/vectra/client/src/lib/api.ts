@@ -167,3 +167,8 @@ export async function createPortal() {
   const { data } = await api.post("/billing/portal");
   return data as { url: string };
 }
+
+export async function cancelSubscription(immediate = false) {
+  const { data } = await api.post("/billing/cancel", { immediate });
+  return data as { ok: boolean; mode: "immediate" | "period_end" };
+}
