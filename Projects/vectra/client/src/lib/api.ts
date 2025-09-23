@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { DiscussionMessage, Thread } from "../types/api";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1";
 
@@ -171,4 +172,117 @@ export async function createPortal() {
 export async function cancelSubscription(immediate = false) {
   const { data } = await api.post("/billing/cancel", { immediate });
   return data as { ok: boolean; mode: "immediate" | "period_end" };
+}
+
+// --- ADD these helpers to your existing api.ts ---
+
+// Threads
+// export async function listThreads(params: {
+//   q?: string;
+//   tag?: string;
+//   applicationId?: string;
+//   page?: number;
+//   limit?: number;
+//   mine?: boolean;
+// }) {
+//   const { data } = await api.get("/discussions", { params });
+//   return data as {
+//     page: number;
+//     limit: number;
+//     total: number;
+//     items: Thread[];
+//   };
+// }
+
+// export async function listThreads(params: {
+//   q?: string;
+//   tag?: string;
+//   applicationId?: string;
+//   page?: number;
+//   limit?: number;
+//   mine?: boolean;
+// }) {
+//   const qp: Record<string, any> = {};
+//   if (params.q) qp.q = params.q;
+//   if (params.tag) qp.tag = params.tag;
+//   if (params.applicationId) qp.applicationId = params.applicationId;
+//   if (typeof params.page === "number") qp.page = params.page;
+//   if (typeof params.limit === "number") qp.limit = params.limit;
+//   if (params.mine) qp.mine = "1"; // ← only include when true
+
+//   const { data } = await api.get("/discussions", { params: qp });
+//   return data as {
+//     page: number;
+//     limit: number;
+//     total: number;
+//     items: Thread[];
+//   };
+// }
+
+export async function listThreads(params: {
+  q?: string;
+  tag?: string;
+  applicationId?: string;
+  page?: number;
+  limit?: number;
+  mine?: boolean;
+}) {
+  const qp: Record<string, any> = {};
+  if (params.q) qp.q = params.q;
+  if (params.tag) qp.tag = params.tag;
+  if (params.applicationId) qp.applicationId = params.applicationId;
+  if (typeof params.page === "number") qp.page = params.page;
+  if (typeof params.limit === "number") qp.limit = params.limit;
+  if (params.mine) qp.mine = "1"; // 👈 don't send mine=false
+
+  const { data } = await api.get("/discussions", { params: qp });
+  return data as {
+    page: number;
+    limit: number;
+    total: number;
+    items: Thread[];
+  };
+}
+
+export async function getThread(id: string) {
+  const { data } = await api.get(`/discussions/${id}`);
+  return data as { thread: Thread };
+}
+
+export async function createThreadApi(input: {
+  title: string;
+  tags?: string[];
+  applicationId?: string;
+}) {
+  const { data } = await api.post("/discussions", input);
+  return data as { thread: Thread };
+}
+
+// Messages
+export async function listMessages(
+  threadId: string,
+  cursor?: string,
+  limit = 30
+) {
+  const { data } = await api.get(`/discussions/${threadId}/messages`, {
+    params: { cursor, limit },
+  });
+  return data as { items: DiscussionMessage[]; nextCursor: string | null };
+}
+
+export async function postMessage(threadId: string, body: string) {
+  const { data } = await api.post(`/discussions/${threadId}/messages`, {
+    body,
+  });
+  return data as { message: DiscussionMessage };
+}
+
+export async function editMessageApi(messageId: string, body: string) {
+  const { data } = await api.patch(`/messages/${messageId}`, { body });
+  return data as { message: DiscussionMessage };
+}
+
+export async function deleteMessageApi(messageId: string) {
+  const { data } = await api.delete(`/messages/${messageId}`);
+  return data as { ok: boolean };
 }

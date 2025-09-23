@@ -1,47 +1,95 @@
+import mongoose from "mongoose";
 import Discussion from "../models/Discussion.model.js";
-import { ok, created } from "../utils/apiResponse.js";
+import DiscussionMessage from "../models/DiscussionMessage.model.js";
 
-// export const listDiscussions = async (req, res) => {
-//   const { company, page = 1, pageSize = 20 } = req.query;
-//   const filter = {};
-//   if (company) filter.company = new RegExp(company, "i");
-//   const [items, total] = await Promise.all([
-//     Discussion.find(filter).sort("-createdAt").skip((page - 1) * pageSize).limit(pageSize).lean(),
-//     Discussion.countDocuments(filter)
-//   ]);
-//   return ok(res, { items, total, page, pageSize });
-// };
+export async function createThread(req, res) {
+  const { title, tags = [], applicationId } = req.body;
+  const doc = await Discussion.create({
+    title: title.trim(),
+    tags,
+    applicationId: applicationId
+      ? new mongoose.Types.ObjectId(applicationId)
+      : null,
+    createdBy: req.user._id,
+    messageCount: 0,
+    lastMessageAt: new Date(),
+    participants: [req.user._id],
+  });
+  return res.status(201).json({ thread: doc });
+}
 
-export const listDiscussions = async (req, res) => {
-  const qsrc = res.locals?.query || req.query;
-  const { company, page = 1, pageSize = 20 } = qsrc;
+export async function listThreads(req, res) {
+  const { q, tag, applicationId, page = 1, limit = 20, mine } = req.query;
 
   const filter = {};
-  if (company) filter.company = new RegExp(company, "i");
+  if (q) filter.$text = { $search: q };
+  if (tag) filter.tags = tag;
+  if (applicationId)
+    filter.applicationId = new mongoose.Types.ObjectId(applicationId);
+  if (mine === "1") filter.createdBy = req.user._id;
 
   const [items, total] = await Promise.all([
     Discussion.find(filter)
-      .sort("-createdAt")
-      .skip((Number(page) - 1) * Number(pageSize))
-      .limit(Number(pageSize))
+      .sort({ lastMessageAt: -1, _id: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate("createdBy", "name avatarUrl")
       .lean(),
     Discussion.countDocuments(filter),
   ]);
 
-  return ok(res, {
-    items,
+  return res.json({
+    page,
+    limit,
     total,
-    page: Number(page),
-    pageSize: Number(pageSize),
+    items,
   });
-};
+}
 
-export const createDiscussion = async (req, res) => {
-  const doc = await Discussion.create({
-    company: req.body.company,
-    position: req.body.position,
-    title: req.body.title,
-    createdBy: req.user._id,
-  });
-  return created(res, doc);
-};
+export async function getThread(req, res) {
+  const { id } = req.params;
+  const thread = await Discussion.findById(id)
+    .populate("createdBy", "name avatarUrl")
+    .lean();
+  if (!thread) return res.status(404).json({ message: "Thread not found" });
+  return res.json({ thread });
+}
+
+export async function updateThread(req, res) {
+  const { id } = req.params;
+  const thread = await Discussion.findById(id);
+  if (!thread) return res.status(404).json({ message: "Thread not found" });
+
+  // Owner-only (add admin role check if you have roles)
+  if (thread.createdBy.toString() !== req.user._id.toString()) {
+    return res
+      .status(403)
+      .json({ message: "Only the thread owner can update it." });
+  }
+
+  const { title, tags, pinned, locked } = req.body;
+  if (title !== undefined) thread.title = title.trim();
+  if (tags !== undefined) thread.tags = tags;
+  if (pinned !== undefined) thread.pinned = !!pinned;
+  if (locked !== undefined) thread.locked = !!locked;
+
+  await thread.save();
+  return res.json({ thread });
+}
+
+export async function deleteThread(req, res) {
+  const { id } = req.params;
+  const thread = await Discussion.findById(id);
+  if (!thread) return res.status(404).json({ message: "Thread not found" });
+
+  if (thread.createdBy.toString() !== req.user._id.toString()) {
+    return res
+      .status(403)
+      .json({ message: "Only the thread owner can delete it." });
+  }
+
+  await DiscussionMessage.deleteMany({ threadId: thread._id });
+  await Discussion.deleteOne({ _id: thread._id });
+
+  return res.json({ ok: true });
+}

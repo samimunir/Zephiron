@@ -7,6 +7,8 @@ import webhookRoutes from "./routes/webhooks.routes.js";
 import { notFound, errorHandler } from "./middleware/errorHandler.js";
 import env from "./config/env.js";
 import { isDBReady } from "./config/db.js";
+import discussionsRoutes from "./routes/discussions.routes.js";
+import messagesRoutes from "./routes/messages.routes.js";
 
 const app = express();
 
@@ -42,6 +44,9 @@ app.get("/readiness", (_req, res) =>
 
 // API routes
 app.use("/api/v1", routes);
+
+app.use("/api/v1", discussionsRoutes);
+app.use("/api/v1", messagesRoutes);
 
 // 404 + error handling
 app.use(notFound);

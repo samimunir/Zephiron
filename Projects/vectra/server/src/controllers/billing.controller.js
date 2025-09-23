@@ -103,18 +103,75 @@ export const createPortalSession = async (req, res) => {
   res.json({ url: portal.url });
 };
 
+// export async function cancelSubscription(req, res) {
+//   try {
+//     const user = await User.findById(req.user._id).lean();
+//     if (!user) return res.status(401).json({ message: "User not found" });
+
+//     if (!user.stripeCustomerId) {
+//       return res
+//         .status(400)
+//         .json({ message: "No Stripe customer. Nothing to cancel." });
+//     }
+
+//     // Prefer stored subscription id; fallback: find active subscription for this customer.
+//     let subscriptionId = user.stripeSubscriptionId;
+//     if (!subscriptionId) {
+//       const list = await stripe.subscriptions.list({
+//         customer: user.stripeCustomerId,
+//         status: "all",
+//         limit: 3,
+//       });
+//       const active = list.data.find((s) =>
+//         ["active", "trialing", "past_due", "incomplete"].includes(s.status)
+//       );
+//       if (!active)
+//         return res
+//           .status(400)
+//           .json({ message: "No active subscription found." });
+//       subscriptionId = active.id;
+//     }
+
+//     const { immediate } = req.body || {};
+//     if (immediate) {
+//       // Cancel now (prorations per Stripe settings)
+//       await stripe.subscriptions.cancel(subscriptionId);
+//       // Webhook will flip plan/status to free; we can optimistically set:
+//       await User.updateOne(
+//         { _id: user._id },
+//         { $set: { plan: "free", subscriptionStatus: "canceled" } }
+//       );
+//       return res.json({ ok: true, mode: "immediate" });
+//     } else {
+//       // Cancel at period end
+//       await stripe.subscriptions.update(subscriptionId, {
+//         cancel_at_period_end: true,
+//       });
+//       // Webhook will mark as 'canceled' when it ends; until then Stripe status becomes 'active' with cancel_at_period_end=true
+//       await User.updateOne(
+//         { _id: user._id },
+//         { $set: { subscriptionStatus: "active" } } // leave plan as pro until end; webhook will downgrade later
+//       );
+//       return res.json({ ok: true, mode: "period_end" });
+//     }
+//   } catch (err) {
+//     const msg = err?.raw?.message || err?.message || "Stripe error";
+//     console.error("cancelSubscription error:", msg);
+//     return res.status(400).json({ message: msg });
+//   }
+// }
+
 export async function cancelSubscription(req, res) {
   try {
     const user = await User.findById(req.user._id).lean();
     if (!user) return res.status(401).json({ message: "User not found" });
-
     if (!user.stripeCustomerId) {
       return res
         .status(400)
         .json({ message: "No Stripe customer. Nothing to cancel." });
     }
 
-    // Prefer stored subscription id; fallback: find active subscription for this customer.
+    // Find subscription id (use stored one, or list as fallback)
     let subscriptionId = user.stripeSubscriptionId;
     if (!subscriptionId) {
       const list = await stripe.subscriptions.list({
@@ -133,26 +190,45 @@ export async function cancelSubscription(req, res) {
     }
 
     const { immediate } = req.body || {};
+
     if (immediate) {
-      // Cancel now (prorations per Stripe settings)
-      await stripe.subscriptions.cancel(subscriptionId);
-      // Webhook will flip plan/status to free; we can optimistically set:
+      // Cancel now
+      const canceled = await stripe.subscriptions.cancel(subscriptionId);
       await User.updateOne(
         { _id: user._id },
-        { $set: { plan: "free", subscriptionStatus: "canceled" } }
+        {
+          $set: {
+            plan: "free",
+            subscriptionStatus: "canceled",
+            currentPeriodEnd: null,
+            stripeSubscriptionId: canceled.id, // keep for history if you want
+          },
+        }
       );
       return res.json({ ok: true, mode: "immediate" });
     } else {
       // Cancel at period end
-      await stripe.subscriptions.update(subscriptionId, {
+      const updated = await stripe.subscriptions.update(subscriptionId, {
         cancel_at_period_end: true,
       });
-      // Webhook will mark as 'canceled' when it ends; until then Stripe status becomes 'active' with cancel_at_period_end=true
+
+      const currentPeriodEnd = updated.current_period_end
+        ? new Date(updated.current_period_end * 1000)
+        : null;
+
+      // Keep plan=pro (still active), but reflect upcoming cancellation
       await User.updateOne(
         { _id: user._id },
-        { $set: { subscriptionStatus: "active" } } // leave plan as pro until end; webhook will downgrade later
+        {
+          $set: {
+            subscriptionStatus: updated.status, // likely "active"
+            currentPeriodEnd,
+            stripeSubscriptionId: updated.id,
+          },
+        }
       );
-      return res.json({ ok: true, mode: "period_end" });
+
+      return res.json({ ok: true, mode: "period_end", currentPeriodEnd });
     }
   } catch (err) {
     const msg = err?.raw?.message || err?.message || "Stripe error";
