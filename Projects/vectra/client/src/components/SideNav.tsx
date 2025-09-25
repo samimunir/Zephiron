@@ -10,7 +10,7 @@ export default function SideNav() {
     <aside className="hidden md:block w-64 shrink-0">
       <nav className="sticky top-16 flex flex-col gap-1 p-3">
         <NavLink
-          to="/"
+          to="/dashboard"
           end
           className={({ isActive }) => `${link} ${isActive ? active : ""}`}
         >
