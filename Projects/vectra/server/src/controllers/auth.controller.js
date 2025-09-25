@@ -95,5 +95,6 @@ export const logoutAll = async (req, res) => {
 };
 
 export const me = async (req, res) => {
+  console.log(req.user);
   return ok(res, { user: req.user });
 };

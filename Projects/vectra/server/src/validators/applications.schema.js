@@ -1,61 +1,68 @@
 import { z } from "zod";
 
+/** Common enums */
+const Status = z.enum(["applied", "interview", "offer", "rejected", "closed"]);
+const WorkType = z.enum(["remote", "in-person", "hybrid"]);
+
+/** Create */
 export const createApplicationSchema = z.object({
   body: z.object({
-    jobTitle: z.string().min(1),
     company: z.string().min(1),
-    workType: z.enum(["remote", "in-person", "hybrid"]).optional(),
-    status: z.enum(["applied", "interview", "offer", "rejected", "closed"]).optional(),
-    location: z.string().optional(),
-    careerCategory: z.string().optional(),
-    positionType: z.string().optional(),
-    salary: z.object({
-      amount: z.number().positive().optional(),
-      currency: z.string().default("USD"),
-      cadence: z.enum(["hourly", "yearly"]).optional()
-    }).optional(),
-    applicationUrl: z.string().url().optional(),
-    description: z.string().optional(),
-    notes: z.string().optional(),
-    skills: z.array(z.string()).optional(),
-    tags: z.array(z.string()).optional()
-  })
+    jobTitle: z.string().min(1),
+
+    status: Status.optional(),
+    workType: WorkType.optional(),
+
+    // NEW structured location
+    city: z.string().min(1),
+    state: z.string().optional(),
+    country: z.string().min(1),
+
+    // NEW job posting url
+    postingUrl: z.string().url().optional(),
+
+    // NEW extras
+    skills: z.array(z.string().trim()).max(50).optional(),
+    tags: z.array(z.string().trim()).max(50).optional(),
+    category: z
+      .enum([
+        "technology",
+        "design",
+        "product",
+        "data",
+        "sales",
+        "marketing",
+        "operations",
+        "finance",
+        "hr",
+        "other",
+      ])
+      .optional(),
+
+    notes: z.string().max(5000).optional(),
+    // Accept either an ISO string or Date (Mongoose can cast)
+    appliedAt: z.union([z.string().datetime(), z.date()]).optional(),
+  }),
 });
 
+/** List (query filters) */
 export const listApplicationsSchema = z.object({
   query: z.object({
-    status: z.enum(["applied", "interview", "offer", "rejected", "closed"]).optional(),
-    company: z.string().optional(),
-    q: z.string().optional(),
-    page: z.coerce.number().min(1).default(1),
-    pageSize: z.coerce.number().min(1).max(100).default(20),
-    sort: z.string().optional()
-  })
+    q: z.string().trim().optional(),
+    status: Status.optional(),
+    page: z.coerce.number().int().min(1).default(1),
+    pageSize: z.coerce.number().int().min(1).max(100).default(20),
+    sort: z.string().optional(),
+  }),
 });
 
+/** Update (partial of create) */
 export const updateApplicationSchema = z.object({
   params: z.object({ id: z.string().length(24) }),
-  body: z.object({
-    jobTitle: z.string().optional(),
-    company: z.string().optional(),
-    workType: z.enum(["remote", "in-person", "hybrid"]).optional(),
-    status: z.enum(["applied", "interview", "offer", "rejected", "closed"]).optional(),
-    location: z.string().optional(),
-    careerCategory: z.string().optional(),
-    positionType: z.string().optional(),
-    salary: z.object({
-      amount: z.number().positive().optional(),
-      currency: z.string(),
-      cadence: z.enum(["hourly", "yearly"]).optional()
-    }).optional(),
-    applicationUrl: z.string().url().optional(),
-    description: z.string().optional(),
-    notes: z.string().optional(),
-    skills: z.array(z.string()).optional(),
-    tags: z.array(z.string()).optional()
-  })
+  body: createApplicationSchema.shape.body.partial(),
 });
 
+/** Remove */
 export const removeApplicationSchema = z.object({
-  params: z.object({ id: z.string().length(24) })
+  params: z.object({ id: z.string().length(24) }),
 });
