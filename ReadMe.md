@@ -1,10 +1,18 @@
-Sami Munir | Rutgers University | samidmunir@outlook.com
 # Zephiron - Snapdragon X Elite
+
+Sami Munir | Rutgers University | <samidmunir@outlook.com>
+
 ## Projects
-### vectra - __(MERN stack)__
+
+### vectra - **(MERN stack)**
+
 ## Rust programming
+
 ### Tutorials
+
 - hello_world
 - variables_and_mutability
+
 ### Projects
+
 - job_tracker_cli
