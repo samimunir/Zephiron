@@ -13,6 +13,6 @@ Sami Munir | Rutgers University | <samidmunir@outlook.com>
 - hello_world
 - variables_and_mutability
 
-### Projects
+### Personal projects
 
 - job_tracker_cli
